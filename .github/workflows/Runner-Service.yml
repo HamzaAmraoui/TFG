@@ -40,12 +40,12 @@ jobs:
         - name: Desplegar en VPS via ssh
           uses: appleboy/ssh-action@v1
           with:
-            host: ${{ secrets.IPHOST}}
-            username: ${{ secrets.HOST }}
-            key: ${{ secrets.RANCHER_SSH_KEY}}
-        - name: Ejecutamos el despliegue
-          run: |
-              cd C:\Users\${{secrets.HOST}}\Desktop
-              kubectl apply -f k8s/deployment.yaml 
+            host: ${{secrets.IPHOST}}
+            username: ${{secrets.HOST}}
+            key: ${{secrets.RANCHER_SSH_KEY}}
+            port: 22
+            script: |
+              cd /home/${{ secrets.HOST }}/project
+              kubectl apply -f k8s/deployment.yaml
 
         
