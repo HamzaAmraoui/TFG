@@ -29,7 +29,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Crear y Publicar PHP web image
         run: |
-          docker-compose -f docker-compose.yml build web
+          docker compose -f docker-compose.yml build web
           docker tag mi-appweb:latest khalifi11/mi-appweb:latest
           docker push khalifi11/mi-appweb:latest
   deploy-dev:
