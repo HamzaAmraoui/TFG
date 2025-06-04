@@ -32,22 +32,18 @@ jobs:
           docker compose -f docker-compose.yml build web
           docker tag mi-appweb:latest khalifi11/mi-appweb:latest
           docker push khalifi11/mi-appweb:latest
+  
   deploy-dev:
       if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'development')
       needs: build
-      runs-on: [self-hosted, linux] 
+      runs-on: [self-hosted, windows]
       steps:
-        - name: Desplegar en VPS via ssh
-          uses: appleboy/ssh-action@v1
-          with:
-            host: ${{secrets.IPHOST}}
-            username: ${{secrets.HOST}}
-            key: ${{secrets.RANCHER_SSH_KEY}}
-            port: 22
-            script: |
-              cd /home/${{ secrets.HOST }}/project
-              kubectl apply -f k8s/deployment.yaml
-  
+        - name: Clonar repositorio
+          uses: actions/checkout@v2
+        - name: Aplicar deployment con kubectl
+          run: |
+            kubectl apply -f deployment.yml
+        
   deploy-prod:
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'production')
     needs: build
