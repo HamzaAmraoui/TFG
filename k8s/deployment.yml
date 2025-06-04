@@ -1,1 +1,41 @@
-dsd
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-appweb
+  labels:
+    app: mi-appweb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mi-appweb
+  template:
+    metadata:
+      labels:
+        app: mi-appweb
+    spec:
+      containers:
+        - name: mi-appweb
+          image: khalifi11/mi-appweb:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-appweb-service
+spec:
+  selector:
+    app: mi-appweb
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
