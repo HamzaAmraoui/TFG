@@ -42,7 +42,7 @@ jobs:
           uses: actions/checkout@v2
         - name: Aplicar deployment con kubectl
           run: |
-            kubectl apply -f deployment.yml
+            kubectl apply -f ./k8s/deployment.yml
         
   deploy-prod:
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'production')
