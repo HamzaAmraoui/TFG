@@ -1,9 +1,10 @@
 name: "CI/CD Service"
+
 on:
   workflow_dispatch:
     inputs:
       entornos:
-        description: "¿En que entorno quieres desplegarlo?"
+        description: "¿En qué entorno quieres desplegarlo?"
         required: true
         default: development
         type: choice
@@ -15,80 +16,86 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clonar Repositorio
+      - name: Clonar repositorio
         uses: actions/checkout@v2
+
       - name: Establecer Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login Docker-Hub
+
+      - name: Login en Docker Hub
         uses: docker/login-action@v2
-        with: 
+        with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Crear y Publicar PHP web image
+
+      - name: Crear y subir imagen Docker
         run: |
           docker compose -f docker-compose.yml build web
           docker tag mi-appweb:latest khalifi11/mi-appweb:latest
           docker push khalifi11/mi-appweb:latest
-  
+
   deploy-dev:
-      if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || github.event.inputs.entornos == 'development')
-      needs: build
-      runs-on: [self-hosted, windows]
-      steps:
-        - name: Clonar repositorio
-          uses: actions/checkout@v2
-        - name: Aplicar deployment con kubectl
-          run: |
-            kubectl apply -f ./k8s/deployment.yml
-        
+    if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || github.event.inputs.entornos == 'development')
+    needs: build
+    runs-on: [self-hosted, windows]
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v2
+
+      - name: Aplicar deployment con kubectl
+        run: |
+          kubectl apply -f ./k8s/deployment.yml
+
   deploy-prod:
     if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || github.event.inputs.entornos == 'production')
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Desplegar en EC2 con Docker Compose y HTTPS
+      - name: Desplegar en EC2 con Docker y Nginx
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            
-            sudo yum update -y
-            sudo yum install -y git docker nginx certbot python3-certbot-nginx
+            set -e
 
-            
+            # Actualizar e instalar herramientas necesarias
+            sudo apt-get update -y
+            sudo apt-get install -y git docker.io nginx certbot python3-certbot-nginx curl
+
             sudo systemctl enable docker
             sudo systemctl start docker
             sudo systemctl enable nginx
             sudo systemctl start nginx
 
-           
-            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+            # Instalar docker compose v2
+            sudo mkdir -p /usr/local/lib/docker/cli-plugins
+            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/lib/docker/cli-plugins/docker-compose
+            sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
-            
-            sudo usermod -aG docker ec2-user
+            # Añadir usuario al grupo docker (solo si es necesario)
+            sudo usermod -aG docker $USER || true
 
-           
+            # Clonar o actualizar el proyecto
             if [ ! -d "mi-app" ]; then
               git clone https://github.com/${{ github.repository }} mi-app
             fi
 
             cd mi-app
-            git reset --hard
-            git pull origin main
+            git fetch --all
+            git reset --hard origin/main
 
-           
+            # Desplegar la nueva imagen
             docker pull khalifi11/mi-appweb:latest
             docker compose down || true
             docker compose up -d
 
-            
+            # Configuración de nginx para proxy_pass
             sudo tee /etc/nginx/conf.d/mi-app.conf > /dev/null <<EOF
             server {
               listen 80;
-              server_name tu-dominio.com;
+              server_name hamraouielkhalifi.xyz;
 
               location / {
                 proxy_pass http://localhost:3000;
@@ -102,10 +109,8 @@ jobs:
 
             sudo nginx -t && sudo systemctl reload nginx
 
-            # Solicita y configura HTTPS con Let's Encrypt
-            sudo certbot --nginx -d hamraouielkhalifi.xyz --non-interactive --agree-tos -m tu-email@dominio.com
+            # Solicitar e instalar el certificado SSL
+            sudo certbot --nginx --non-interactive --agree-tos --email tu-email@dominio.com -d hamraouielkhalifi.xyz
 
-            # Prueba renovación automática
+            # Verificar renovación automática
             sudo certbot renew --dry-run
-
-        
