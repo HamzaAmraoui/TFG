@@ -31,7 +31,7 @@ jobs:
           docker push khalifi11/mi-appweb:latest
   
   deploy-dev:
-       if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || github.event.inputs.entornos == 'development')
+      if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || github.event.inputs.entornos == 'development')
       needs: build
       runs-on: [self-hosted, windows]
       steps:
