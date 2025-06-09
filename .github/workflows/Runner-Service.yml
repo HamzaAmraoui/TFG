@@ -42,41 +42,42 @@ jobs:
             kubectl apply -f ./k8s/deployment.yml
         
   deploy-prod:
-      if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'production')
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Desplegar en EC2 con Docker Compose
-          uses: appleboy/ssh-action@v0.1.7
-          with:
-            host: ${{ secrets.EC2_HOST }}
-            username: ${{ secrets.HOST }}
-            key: ${{ secrets.SSH_KEY }}
-            script: |
-                sudo yum update -y
-                sudo yum install -y git docker
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'production')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar en EC2 con Docker Compose
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo yum update -y
+            sudo yum install -y git docker
 
-                sudo systemctl enable docker
-                sudo systemctl start docker
+            sudo systemctl enable docker
+            sudo systemctl start docker
 
-                sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                sudo chmod +x /usr/local/bin/docker-compose
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
 
-                git --version
-                docker --version
-                docker-compose --version
+            git --version
+            docker --version
+            docker-compose --version
 
-                sudo usermod -aG docker ec2-user
+            sudo usermod -aG docker ec2-user
 
-                if [ ! -d "mi-app" ]; then
-                git clone https://github.com/${{ github.repository }} mi-app
-                fi
-          
-                cd mi-app
-                git reset --hard
-                git pull origin main
+            if [ ! -d "mi-app" ]; then
+              git clone https://github.com/${{ github.repository }} mi-app
+            fi
 
-                docker pull khalifi11/mi-appweb:latest
-                docker compose down || true
-                docker compose up -d
+            cd mi-app
+            git reset --hard
+            git pull origin main
+
+            docker pull khalifi11/mi-appweb:latest
+            docker-compose down || true
+            docker-compose up -d
+
         
