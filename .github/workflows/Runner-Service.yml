@@ -98,6 +98,8 @@ jobs:
                   ServerName hamraouielkhalifi.xyz
               
                   ProxyPreserveHost On
+                  ProxyPass / http://localhost:3000/
+                  ProxyPassReverse / http://localhost:3000/
                   ErrorLog /var/log/httpd/mi-app-error.log
                   CustomLog /var/log/httpd/mi-app-access.log combined
               </VirtualHost>
