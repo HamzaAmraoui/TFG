@@ -62,7 +62,7 @@ jobs:
 
             # Actualizar e instalar herramientas necesarias en Amazon Linux
             sudo yum update -y
-            sudo yum install -y git docker nginx certbot python3-certbot-nginx curl
+            sudo yum install -y git docker nginx certbot python3-certbot-nginx 
 
             # Habilitar servicios
             sudo systemctl enable docker
@@ -111,15 +111,12 @@ jobs:
             sudo nginx -t && sudo systemctl reload nginx
             
             # Solicitar certificado HTTPS con Certbot
-            sudo certbot --nginx --non-interactive --agree-tos --email tu-email@dominio.com -d hamraouielkhalifi.xyz
+            sudo certbot --nginx --non-interactive --agree-tos --email hamzafuego2@gmail.com -d hamraouielkhalifi.xyz
             
             # Renovación automática
             sudo certbot renew --dry-run
             
             sudo nginx -t && sudo systemctl reload nginx
-            
-            # Solicitar e instalar el certificado SSL
-            sudo certbot --nginx --non-interactive --agree-tos -d hamraouielkhalifi.xyz
             
             # Verificar renovación automática
             sudo certbot renew --dry-run
