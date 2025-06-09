@@ -53,11 +53,20 @@ jobs:
             username: ${{ secrets.HOST }}
             key: ${{ secrets.SSH_KEY }}
             script: |
-                sudo apt update
-                sudo apt install -y git docker.io docker-compose-plugin
+                sudo yum update -y
+                sudo yum install -y git docker
+
                 sudo systemctl enable docker
                 sudo systemctl start docker
-                sudo usermod -aG docker $USER
+
+                sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                sudo chmod +x /usr/local/bin/docker-compose
+
+                git --version
+                docker --version
+                docker-compose --version
+
+                sudo usermod -aG docker ec2-user
 
                 if [ ! -d "mi-app" ]; then
                 git clone https://github.com/${{ github.repository }} mi-app
