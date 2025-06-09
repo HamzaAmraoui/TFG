@@ -93,34 +93,42 @@ jobs:
             docker compose up -d
 
             # Configurar NGINX
-            sudo tee /etc/nginx/conf.d/mi-app.conf > /dev/null <<EOF
+            sudo tee /etc/nginx/conf.d/mi-app.conf > /dev/null <<'EOF'
             server {
-            listen 80;
-            server_name hamraouielkhalifi.xyz;
-
-            location / {
-            proxy_pass http://localhost:3000;
-            proxy_set_header Host \$host;
-            proxy_set_header X-Real-IP \$remote_addr;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto \$scheme;
-            }
-            # Ruta para servir PHP
-            location ~ ^/php(/.*\.php)$ {
-                root /usr/share/nginx/html;
-                fastcgi_pass unix:/run/php-fpm/www.sock;
-                fastcgi_index index.php;
-                include fastcgi_params;
-                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            }
-        
-            # Archivos estáticos en /php/
-            location /php/ {
-                root /usr/share/nginx/html;
-                index index.php;
-            }
+              listen 80;
+              server_name hamraouielkhalifi.xyz;
+          
+              # Ruta raíz: sirve HTML y PHP desde /usr/share/nginx/html
+              root /usr/share/nginx/html;
+              index index.php index.html index.htm;
+          
+              location / {
+                  try_files \$uri \$uri/ /index.php?\$args;
+              }
+          
+              # Procesar archivos PHP
+              location ~ \.php$ {
+                  include fastcgi_params;
+                  fastcgi_pass unix:/run/php-fpm/www.sock;
+                  fastcgi_index index.php;
+                  fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+              }
+          
+              # Node.js corriendo en localhost:3000 accesible desde /api/
+              location /api/ {
+                  proxy_pass http://localhost:3000/;
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+                  proxy_cache_bypass \$http_upgrade;
+              }
             }
             EOF
+
 
             sudo nginx -t && sudo systemctl reload nginx
             
