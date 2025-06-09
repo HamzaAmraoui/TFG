@@ -88,9 +88,9 @@ jobs:
               git reset --hard origin/main
     
               # Desplegar nueva imagen Docker
-              docker pull khalifi11/mi-appweb:latest
-              docker compose down || true
-              docker compose up -d
+              sudo docker pull khalifi11/mi-appweb:latest
+              sudo docker compose down || true
+              sudo docker compose up -d
     
               # Configurar Apache para proxy inverso a contenedor en puerto 3000
               sudo tee /etc/httpd/conf.d/mi-app.conf > /dev/null <<EOF
