@@ -46,28 +46,31 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Desplegar en EC2 con Docker Compose
+      - name: Desplegar en EC2 con Docker Compose y HTTPS
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            
             sudo yum update -y
-            sudo yum install -y git docker
+            sudo yum install -y git docker nginx certbot python3-certbot-nginx
 
+            
             sudo systemctl enable docker
             sudo systemctl start docker
+            sudo systemctl enable nginx
+            sudo systemctl start nginx
 
+           
             sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
 
-            git --version
-            docker --version
-            docker-compose --version
-
+            
             sudo usermod -aG docker ec2-user
 
+           
             if [ ! -d "mi-app" ]; then
               git clone https://github.com/${{ github.repository }} mi-app
             fi
@@ -76,8 +79,33 @@ jobs:
             git reset --hard
             git pull origin main
 
+           
             docker pull khalifi11/mi-appweb:latest
-            docker-compose down || true
-            docker-compose up -d
+            docker compose down || true
+            docker compose up -d
+
+            
+            sudo tee /etc/nginx/conf.d/mi-app.conf > /dev/null <<EOF
+            server {
+              listen 80;
+              server_name tu-dominio.com;
+
+              location / {
+                proxy_pass http://localhost:3000;
+                proxy_set_header Host \$host;
+                proxy_set_header X-Real-IP \$remote_addr;
+                proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+            }
+            EOF
+
+            sudo nginx -t && sudo systemctl reload nginx
+
+            # Solicita y configura HTTPS con Let's Encrypt
+            sudo certbot --nginx -d hamraouielkhalifi.xyz --non-interactive --agree-tos -m tu-email@dominio.com
+
+            # Prueba renovación automática
+            sudo certbot renew --dry-run
 
         
