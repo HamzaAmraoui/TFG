@@ -49,8 +49,8 @@ jobs:
         - name: Desplegar en EC2 con Docker Compose
           uses: appleboy/ssh-action@v0.1.7
           with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USER }}
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.HOST }}
             key: ${{ secrets.SSH_KEY }}
             script: |
 
