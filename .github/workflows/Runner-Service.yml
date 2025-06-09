@@ -110,13 +110,12 @@ jobs:
 
             sudo nginx -t && sudo systemctl reload nginx
             
-            # Solicitar certificado HTTPS con Certbot
-            sudo certbot --nginx --non-interactive --agree-tos --email hamzafuego2@gmail.com -d hamraouielkhalifi.xyz
-            
-            # Renovación automática
-            sudo certbot renew --dry-run
-            
+            # Control para evitar múltiples instancias de certbot
+            if pgrep certbot > /dev/null; then
+              echo "Certbot ya está en ejecución, no se ejecutará otra instancia."
+            else
+              sudo certbot --nginx --non-interactive --agree-tos --email hamzafuego2@gmail.com -d hamraouielkhalifi.xyz
+              sudo certbot renew --dry-run
+            fi
             sudo nginx -t && sudo systemctl reload nginx
-            
-            # Verificar renovación automática
             sudo certbot renew --dry-run
