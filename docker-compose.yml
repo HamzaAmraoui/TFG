@@ -2,17 +2,20 @@ version: '3.8'
 
 services:
   web:
-    image: mi-appweb:latest  
     build:
-      context: ./ 
+      context: ./
       dockerfile: Dockerfile
-    ports:
-      - "3000:80"
+    container_name: php-app
+    expose:
+      - "9000:9000"
+    volumes:
+      - ./web:/var/www/html
     depends_on:
       - db
 
   db:
     image: mysql:5.7
+    container_name: mysql-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
