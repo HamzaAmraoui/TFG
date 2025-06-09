@@ -98,9 +98,6 @@ jobs:
                   ServerName hamraouielkhalifi.xyz
               
                   ProxyPreserveHost On
-                  ProxyPass / http://localhost:8080/
-                  ProxyPassReverse / http://localhost:8080/
-              
                   ErrorLog /var/log/httpd/mi-app-error.log
                   CustomLog /var/log/httpd/mi-app-access.log combined
               </VirtualHost>
