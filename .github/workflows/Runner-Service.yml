@@ -58,89 +58,65 @@ jobs:
           username: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            set -e
-
-            # Actualizar e instalar herramientas necesarias en Amazon Linux
-            sudo yum update -y
-            sudo yum install -y git docker nginx certbot python3-certbot-nginx
-
-            # Habilitar servicios
-            sudo systemctl enable docker
-            sudo systemctl start docker
-            sudo systemctl enable nginx
-            sudo systemctl start nginx
-
-            # Instalar Docker Compose v2
-            sudo mkdir -p /usr/local/lib/docker/cli-plugins
-            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
-            sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-
-            # Añadir usuario actual al grupo docker
-            sudo usermod -aG docker $USER || true
-
-            # Clonar o actualizar el proyecto
-            if [ ! -d "mi-app" ]; then
-              git clone https://github.com/HamzaAmraoui/TFG mi-app
-            fi
-
-            cd mi-app
-            git fetch --all
-            git reset --hard origin/main
-
-            # Desplegar nueva imagen
-            docker pull khalifi11/mi-appweb:latest
-            docker compose down || true
-            docker compose up -d
-
-            # Configurar NGINX para redirigir HTTP a HTTPS (temporal para certbot)
-            sudo tee /etc/nginx/conf.d/mi-app.conf > /dev/null <<EOF
-            server {
-                listen 80;
-                server_name hamraouielkhalifi.xyz;
-            
-                location / {
-                    return 301 https://\$host\$request_uri;
-                }
-            }
-            EOF
-            
-                        sudo nginx -t && sudo systemctl reload nginx
-            
-                        # Ejecutar Certbot para obtener/renovar certificados
-                        if pgrep certbot > /dev/null; then
-                          echo "Certbot ya está en ejecución, no se ejecutará otra instancia."
-                        else
-                          sudo certbot --nginx --non-interactive --agree-tos --email hamzafuego2@gmail.com -d hamraouielkhalifi.xyz
-                        fi
-            
-                        # Configurar NGINX con HTTPS y proxy_pass
-                        sudo tee /etc/nginx/conf.d/mi-app.conf > /dev/null <<EOF
-            server {
-                listen 80;
-                server_name hamraouielkhalifi.xyz;
-                return 301 https://\$host\$request_uri;
-            }
-            
-            server {
-                listen 443 ssl http2;
-                server_name hamraouielkhalifi.xyz;
-            
-                ssl_certificate /etc/letsencrypt/live/hamraouielkhalifi.xyz/fullchain.pem;
-                ssl_certificate_key /etc/letsencrypt/live/hamraouielkhalifi.xyz/privkey.pem;
-                include /etc/letsencrypt/options-ssl-nginx.conf;
-                ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-            
-                location / {
-                    proxy_pass http://localhost:3000;
-                    proxy_set_header Host \$host;
-                    proxy_set_header X-Real-IP \$remote_addr;
-                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-                    proxy_set_header X-Forwarded-Proto \$scheme;
-                }
-            }
-            EOF
-
-            sudo nginx -t && sudo systemctl reload nginx
-
-            # Prueba de renovación de certificados (dry-run)
-            sudo certbot renew --dry-run
+              set -e
+    
+              # Actualizar e instalar herramientas necesarias en Amazon Linux
+              sudo yum update -y
+              sudo yum install -y git docker httpd certbot python3-certbot-apache
+    
+              # Habilitar y arrancar servicios
+              sudo systemctl enable docker
+              sudo systemctl start docker
+              sudo systemctl enable httpd
+              sudo systemctl start httpd
+    
+              # Instalar Docker Compose v2
+              sudo mkdir -p /usr/local/lib/docker/cli-plugins
+              sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+              sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+    
+              # Añadir usuario actual al grupo docker
+              sudo usermod -aG docker $USER || true
+    
+              # Clonar o actualizar el proyecto
+              if [ ! -d "mi-app" ]; then
+                git clone https://github.com/HamzaAmraoui/TFG mi-app
+              fi
+    
+              cd mi-app
+              git fetch --all
+              git reset --hard origin/main
+    
+              # Desplegar nueva imagen Docker
+              docker pull khalifi11/mi-appweb:latest
+              docker compose down || true
+              docker compose up -d
+    
+              # Configurar Apache para proxy inverso a contenedor en puerto 3000
+              sudo tee /etc/httpd/conf.d/mi-app.conf > /dev/null <<EOF
+              <VirtualHost *:80>
+                  ServerName hamraouielkhalifi.xyz
+              
+                  ProxyPreserveHost On
+                  ProxyPass / http://localhost:3000/
+                  ProxyPassReverse / http://localhost:3000/
+              
+                  ErrorLog /var/log/httpd/mi-app-error.log
+                  CustomLog /var/log/httpd/mi-app-access.log combined
+              </VirtualHost>
+              EOF
+    
+              sudo systemctl restart httpd
+    
+              # Ejecutar Certbot para obtener y configurar HTTPS automáticamente
+              # Control para evitar múltiples instancias
+              if pgrep certbot > /dev/null; then
+                echo "Certbot ya está en ejecución, no se ejecutará otra instancia."
+              else
+                sudo certbot --apache --non-interactive --agree-tos --email hamzafuego2@gmail.com -d hamraouielkhalifi.xyz
+                sudo certbot renew --dry-run
+              fi
+    
+              sudo systemctl reload httpd
+              sudo certbot renew --dry-run
+               
