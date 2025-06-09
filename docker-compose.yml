@@ -4,19 +4,15 @@ services:
   web:
     image: mi-appweb:latest  
     build:
-      context: ./
+      context: ./ 
       dockerfile: Dockerfile
-    container_name: php-app
-    expose:
-      - "9000:9000"
-    volumes:
-      - ./web:/var/www/html
+    ports:
+      - "80:80"
     depends_on:
       - db
 
   db:
     image: mysql:5.7
-    container_name: mysql-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -24,4 +20,4 @@ services:
       MYSQL_USER: usuario
       MYSQL_PASSWORD: pass
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql adaptame esto tambien
