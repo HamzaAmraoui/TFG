@@ -2,10 +2,7 @@ version: '3.8'
 
 services:
   web:
-    image: mi-appweb:latest
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: khalifi11/mi-appweb:latest
     ports:
       - "3000:80"
     depends_on:
