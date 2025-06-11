@@ -1,6 +1,9 @@
 name: "CI/CD Service"
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       entornos:
