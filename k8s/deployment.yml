@@ -19,6 +19,15 @@ spec:
           image: khalifi11/mi-appweb:latest
           ports:
             - containerPort: 80
+          env:
+            - name: DB_HOST
+              value: mi-app-db-service
+            - name: DB_USER
+              value: usuario
+            - name: DB_PASSWORD
+              value: pass
+            - name: DB_NAME
+              value: miapp
           resources:
             limits:
               memory: "256Mi"
@@ -26,7 +35,9 @@ spec:
             requests:
               memory: "128Mi"
               cpu: "250m"
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -39,3 +50,90 @@ spec:
       port: 80
       targetPort: 80
   type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-app-db
+  labels:
+    app: mi-app-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mi-app-db
+  template:
+    metadata:
+      labels:
+        app: mi-app-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: miapp
+            - name: MYSQL_USER
+              value: usuario
+            - name: MYSQL_PASSWORD
+              value: pass
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-scripts
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-app-db-service
+spec:
+  selector:
+    app: mi-app-db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  clusterIP: None  
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-scripts
+data:
+  init.sql: |
+    -- Aquí puedes poner el contenido de tu init.sql para inicializar la base de datos
+    CREATE TABLE IF NOT EXISTS ejemplo (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(255) NOT NULL
+    );
