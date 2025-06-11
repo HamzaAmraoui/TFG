@@ -59,25 +59,25 @@ jobs:
           script: |
               set -e
     
-              # Actualizar e instalar herramientas necesarias en Amazon Linux
+              
               sudo yum update -y
               sudo yum install -y git docker httpd certbot python3-certbot-apache
     
-              # Habilitar y arrancar servicios
+              
               sudo systemctl enable docker
               sudo systemctl start docker
               sudo systemctl enable httpd
               sudo systemctl start httpd
     
-              # Instalar Docker Compose v2
+             
               sudo mkdir -p /usr/local/lib/docker/cli-plugins
               sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
               sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
     
-              # Añadir usuario actual al grupo docker
+              
               sudo usermod -aG docker $USER || true
     
-              # Clonar o actualizar el proyecto
+          
               if [ ! -d "mi-app" ]; then
                 git clone https://github.com/HamzaAmraoui/TFG mi-app
               fi
@@ -91,7 +91,7 @@ jobs:
               sudo docker compose down || true
               sudo docker compose up -d
     
-              # Configurar Apache para proxy inverso a contenedor en puerto 3000
+    
               sudo tee /etc/httpd/conf.d/mi-app.conf > /dev/null <<EOF
               <VirtualHost *:80>
                   ServerName hamraouielkhalifi.xyz
@@ -106,8 +106,6 @@ jobs:
     
               sudo systemctl restart httpd
     
-              # Ejecutar Certbot para obtener y configurar HTTPS automáticamente
-              # Control para evitar múltiples instancias
               if pgrep certbot > /dev/null; then
                 echo "Certbot ya está en ejecución, no se ejecutará otra instancia."
               else
