@@ -30,8 +30,7 @@ jobs:
 
       - name: Crear y subir imagen Docker
         run: |
-          docker compose -f docker-compose.yml build web
-          docker tag mi-appweb:latest khalifi11/mi-appweb:latest
+          docker build -t khalifi11/mi-appweb:latest .
           docker push khalifi11/mi-appweb:latest
 
   deploy-dev:
