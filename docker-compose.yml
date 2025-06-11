@@ -2,14 +2,15 @@ version: '3.8'
 
 services:
   web:
-    image: mi-appweb:latest  
+    image: mi-appweb:latest
     build:
-      context: ./ 
+      context: ./
       dockerfile: Dockerfile
     ports:
       - "3000:80"
     depends_on:
       - db
+    restart: always
 
   db:
     image: mysql:5.7
@@ -20,4 +21,8 @@ services:
       MYSQL_USER: usuario
       MYSQL_PASSWORD: pass
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql 
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
