@@ -123,5 +123,21 @@ spec:
   resources:
     requests:
       storage: 5Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-scripts
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS usuarios (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(100) NOT NULL,
+      contraseña VARCHAR(100) NOT NULL
+    );
+
+    INSERT INTO usuarios (nombre, contraseña) VALUES
+      ('hamza', '1234'),
+      ('clase', 'abcd');
 
 
