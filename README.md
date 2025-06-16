@@ -27,9 +27,24 @@ Este repositorio contiene el proyecto de un sistema automatizado de despliegue y
 ├── Dockerfile # Imagen personalizada de la aplicación
 └── README.md # Este documento
 
-markdown
-Copiar
-Editar
+🔄 Funcionamiento del CI/CD
+El flujo CI/CD está automatizado mediante GitHub Actions y funciona así:
+
+Cada push a la rama main o dev activa el pipeline.
+
+Rama dev:
+Construcción de contenedores
+
+Test (opcional)
+
+Simulación de despliegue en entorno de desarrollo (Kubernetes local)
+
+Rama main:
+Construcción de contenedores
+
+Test (opcional)
+
+Despliegue remoto en AWS vía SSH
 
 ## 🚀 Despliegue
 
