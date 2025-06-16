@@ -27,7 +27,8 @@ Este repositorio contiene el proyecto de un sistema automatizado de despliegue y
 ├── Dockerfile # Imagen personalizada de la aplicación
 └── README.md # Este documento
 
-🔄 Funcionamiento del CI/CD
+## 🔄 Funcionamiento del CI/CD
+
 El flujo CI/CD está automatizado mediante GitHub Actions y funciona así:
 
 Cada push a la rama main o dev activa el pipeline.
