@@ -12,9 +12,11 @@ CREATE TABLE `coches` (
   `VERSION` varchar(255) DEFAULT NULL,
   `PRECIO` double DEFAULT NULL,
   `GARANTIA` double DEFAULT NULL,
-  `CODIGO` varchar(255) DEFAULT NULL,
-  `EXISTENCIAS` double DEFAULT NULL
+  `CODIGO` varchar(255) NOT NULL,
+  `EXISTENCIAS` double DEFAULT NULL,
+  PRIMARY KEY (`CODIGO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 
 /*Data for the table `coches` */
 
