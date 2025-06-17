@@ -50,7 +50,8 @@ if (!$con)
 {
 die('Error en la conexión : ');
 }
-$result=$con->query("insert into coches values('$pro','$pre','$alm','$cod',$exi,'$cod',$exi1)");
+$result = "INSERT INTO coches (marca, modelo, version, precio, garantia, codigo, existencias) 
+          VALUES ('$marca', '$modelo', '$version', $precio, $garantia, '$codigo', $existencias)";
 
 if($con ->affected_rows == 1){
 
