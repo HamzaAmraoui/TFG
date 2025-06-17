@@ -92,7 +92,7 @@ jobs:
               # Desplegar nueva imagen Docker
               sudo docker pull khalifi11/mi-appweb:latest
               sudo docker compose down -v || true
-              sudo docker compose up d
+              sudo docker compose up -d
     
               sudo tee /etc/httpd/conf.d/mi-app.conf > /dev/null <<EOF
               <VirtualHost *:80>
