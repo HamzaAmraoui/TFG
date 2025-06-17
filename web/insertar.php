@@ -44,7 +44,7 @@ $exi= $_GET['exi'];
 $cod= $_GET['cod'];
 $exi1= $_GET['exi1'];
 
-$con=mysqli_connect("db","root","root","miapp");
+$con=mysqli_connect("db","root","root","concesionario ");
 
 if (!$con)
 {
