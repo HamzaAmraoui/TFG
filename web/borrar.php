@@ -1,6 +1,6 @@
 <?php
 $cod =$_GET['cod'];
-$con=mysqli_connect("db","root","root","concesionario ");
+$con=mysqli_connect("db","root","root","concesionario");
 
 if (!$con)
 {
