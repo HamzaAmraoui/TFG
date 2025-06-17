@@ -1,15 +1,19 @@
 <?php
-// Verifica si el acceso viene desde index.html
+
+if (!function_exists('str_ends_with')) {
+    function str_ends_with($haystack, $needle) {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+        return substr($haystack, -$length) === $needle;
+    }
+}
+
+
 if (!isset($_SERVER['HTTP_REFERER']) || !str_ends_with($_SERVER['HTTP_REFERER'], 'index.html')) {
     header('Location: index.html');
     exit();
-}
-
-// Función auxiliar si no estás en PHP 8+
-if (!function_exists('str_ends_with')) {
-    function str_ends_with($haystack, $needle) {
-        return substr($haystack, -strlen($needle)) === $needle;
-    }
 }
 ?>
 <!DOCTYPE html>
