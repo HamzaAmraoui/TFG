@@ -49,7 +49,7 @@ jobs:
           kubectl apply -f ./k8s/deployment.yml
 
   deploy-prod:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'production')
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.entornos == 'production'
     needs: build
     runs-on: ubuntu-latest
     steps:
