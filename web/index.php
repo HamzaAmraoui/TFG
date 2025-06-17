@@ -65,8 +65,8 @@ while($data = mysqli_fetch_row($result))
     echo "<tr>
 		  <td>$data[0]</td>
 		  <td>$data[1]</td>
-		  <td><a href='mostrar.php?cod=$data[5]'><img src='infor.png' width='20'></a></td>
-		  <td><a href='borrar.php?cod=$data[5]'><img src='papelera.png' width='20'>
+		  <td><a href='mostrar.php?cod=$data[6]'><img src='infor.png' width='20'></a></td>
+		  <td><a href='borrar.php?cod=$data[6]'><img src='papelera.png' width='20'>
 		  </tr>";
 }
 ?>
