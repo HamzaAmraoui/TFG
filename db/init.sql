@@ -1,122 +1,214 @@
-/*
-SQLyog Trial v13.1.9 (64 bit)
-MySQL - 10.4.28-MariaDB : Database - almacen
-*********************************************************************
-*/
+CREATE DATABASE IF NOT EXISTS concesionario;
 
-/*!40101 SET NAMES utf8 */;
+USE `concesionario`;
 
-/*!40101 SET SQL_MODE=''*/;
+/*Table structure for table `coches` */
 
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`almacen` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+DROP TABLE IF EXISTS `coches`;
 
-USE `almacen`;
-
-/*Table structure for table `almacen` */
-
-DROP TABLE IF EXISTS `almacen`;
-
-CREATE TABLE `almacen` (
-  `PRODUCTO` varchar(255) DEFAULT NULL,
+CREATE TABLE `coches` (
+  `MARCA` varchar(255) DEFAULT NULL,
+  `MODELO` varchar(255) DEFAULT NULL,
+  `VERSION` varchar(255) DEFAULT NULL,
   `PRECIO` double DEFAULT NULL,
-  `ALMACEN` varchar(255) DEFAULT NULL,
-  `CODIGO` varchar(255) NOT NULL,
-  `EXISTENCIAS` double DEFAULT NULL,
-  PRIMARY KEY (`CODIGO`)
+  `GARANTIA` double DEFAULT NULL,
+  `CODIGO` varchar(255) DEFAULT NULL,
+  `EXISTENCIAS` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `almacen` */
+/*Data for the table `coches` */
 
-insert  into `almacen`(`PRODUCTO`,`PRECIO`,`ALMACEN`,`CODIGO`,`EXISTENCIAS`) values 
-('Placabase',140,'CORDOBA','CH 23',12),
-('LENTE VARIFOCAL 6 A 60 MM F1.6 ',14,'Malaga','CM 4',72),
-('LENTE VARIFOCAL 3,5 A 8 MM F1.4 AUTOIRIS ',6,'Malaga','CM 5',22),
-('LENTE VARIFOCAL 6 A 60 MM F1.6 AUTOIRIS ',5,'Malaga','CM 6',20),
-('LENTE CS VARIFOCAL 2,8 A 12 MM F1.4 AUTOIRIS ',10,'Malaga','CM 7',45),
-('SOPORTE ALUMINIO PARA CAMARA CCTV GRAFITO ',11,'Cordoba','CM 8',13),
-('SOPORTE ALUMINIO PARA CAMARA CCTV PLATA ',6,'Cordoba','CM 9',5),
-('Papel',12,'CORDOBA','CO34',34),
-('ADAPTADOR DE DISCO SATA A DISCO IDE ',5,'Granada','HF 11',67),
-('DISCO DURO 250GB SATA PARA SERVIDOR WEB ',8,'Granada','HF 12',17),
-('DISCO DURO 500GB SATA PARA SERVIDOR WEB ',5,'Granada','HF 13',5),
-('SECUENCIADOR PARA 8 CAMARAS ',11,'Sevilla','HF 2',34),
-('SECUENCIADOR 8 CAMARAS CON AUDIO ',11,'Sevilla','HF 3',34),
-('SECUENCIADOR 8 CAMARAS CON ALARMA ',10,'Sevilla','HF 4',15),
-('CONVERTIDOR DE VIDEO A VGA ',13,'Sevilla','HF 5',15),
-('GRABADORA DIGITAL 36 HORAS USB ',5,'Granada','HF 6',72),
-('GRABADOR DIGITAL VIDEO 4 CANALES BASICO ',6,'Granada','HF 7',89),
-('GRABADOR DIGITAL 4 CANALES H264 CON RED ',13,'Granada','HF 8',43),
-('GRABADOR DIGITAL 8 CANALES H264 CON RED ',14,'Granada','HF 9',24),
-('LENTE FIJA 6 MM TIPO BOARD  ',7,'Malaga','MP 1',2),
-('LENTE FIJA 8 MM TIPO BOARD ',7,'Malaga','MP 2',61),
-('LENTE FIJA 12 MM TIPO BOARD ',7,'Malaga','MP 3',97),
-('LENTE FIJA 16 MM TIPO BOARD ',5,'Malaga','MP 4',12),
-('LENTE AUTOIRIS GRAN ANGULAR 2,8 MM 1/3 ',7,'Malaga','MP 5',87),
-('LENTE AUTOIRIS 4 MM 1/3 ',9,'Malaga','MP 6',12),
-('LENTE AUTOIRIS 6 MM 1/3 ',7,'Malaga','MP 7',76),
-('LENTE AUTOIRIS 8 MM 1/3 ',14,'Malaga','MP 8',80),
-('LENTE AUTOIRIS 12 MM 1/3  ',7,'Malaga','MP 9',81),
-('DISCO DURO 1000GB SATA PARA SERVIDOR WEB ',7,'Granada','PO 1',97),
-('MINICAMARA ESPIA OCULTA EN AURICULAR CABLEADA ',11,'Granada','PO 2',78),
-('MINICAMARA ESPIA OCULTA LENTE BOTON CABLEADA ',7,'Granada','PO 3',26),
-('MINI CAMARA ESPIA OCULTA LENTE TORNILLO CABLEADA ',12,'Granada','PO 4',93),
-('MINICAMARA ESPIA OCULTA LENTE PINHOLE CABLEADA ',7,'Granada','PO 5',38),
-('MINICAMARA ESPIA OCULTA EN BOTON INALAMBRICA ',12,'Granada','PO 6',69),
-('TRANSMISOR INALAMBRICO PARA CAMARA ESPIA 500 MW ',8,'Granada','PO 7',45),
-('CAMARA DOMO SIMULADA CON PRESENCIA ',11,'Cordoba','VC 1',52),
-('CAMARA COLOR INFRARROJOS EXTERIOR CON ZOOM X22 80M ',8,'Sevilla','VC 10',99),
-('CAMARA MICROSCOPIO CON CONEXIÓN USB  ',8,'Sevilla','VC 11',93),
-('TELEVISION MONITOR LCD COLOR 7 PULGADAS ',9,'Sevilla','VC 12',22),
-('TELEVISION MONITOR LCD EN PARASOL 5,6 PULGADAS PILOTO ',10,'Sevilla','VC 13',58),
-('MONITOR LCD EN PARASOL 5,6 PULGADAS COPILOTO ',12,'Sevilla','VC 14',62),
-('MONITOR COLOR SECUENCIADOR 4 CAMARAS ',8,'Sevilla','VC 15',28),
-('QUAD COLOR 8 CAMARAS CON MENU Y OSD ',5,'Sevilla','VC 16',92),
-('CAMARA COLOR INFRARROJOS ANTIVANDALICA VARIFOCAL 30 M ',10,'Cordoba','VC 2',42),
-('CAMARA COLOR EXTERIOR VISION NOCTURNA 30M LENTE 6 MM ',6,'Sevilla','VC 3',32),
-('CAMARA COLOR DIA NOCHE ALTA RESOLUCION CON SONIDO ',11,'Sevilla','VC 4',2),
-('CAMARA DIA NOCHE ALTA RESOLUCION Y SENSIBILIDAD ',12,'Sevilla','VC 5',94),
-('CAMARA EXTERIOR VISION NOCTURNA ALTA RESOLUCION 50M ',8,'Sevilla','VC 6',47),
-('CAMARA COLOR EXTERIOR VISION NOCTURNA 75M ',14,'Sevilla','VC 7',72),
-('CAMARA COLOR EXTERIOR VISION NOCTURNA 100M ',8,'Sevilla','VC 8',72),
-('CAMARA COLOR EXTERIOR VISION NOCTURNA CON VISERA 15 METROS ',15,'Sevilla','VC 9',15);
-
-/*Table structure for table `alumnos` */
-
-DROP TABLE IF EXISTS `alumnos`;
-
-CREATE TABLE `alumnos` (
-  `nombre` varchar(20) DEFAULT NULL,
-  `dni` varchar(10) NOT NULL,
-  PRIMARY KEY (`dni`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `alumnos` */
-
-insert  into `alumnos`(`nombre`,`dni`) values 
-('Luis','2452345'),
-('Antonio Sanchez','30456892J'),
-('matriz[0]','matriz[1]');
-
-/*Table structure for table `datos` */
-
-DROP TABLE IF EXISTS `datos`;
-
-CREATE TABLE `datos` (
-  `primero` varchar(20) DEFAULT NULL,
-  `segundo` int(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `datos` */
-
-insert  into `datos`(`primero`,`segundo`) values 
-('antonio',0),
-('manuel',1235456);
+insert  into `coches`(`MARCA`,`MODELO`,`VERSION`,`PRECIO`,`GARANTIA`,`CODIGO`,`EXISTENCIAS`) values 
+('Alfa Romeo','M167','166 2.4 JTD Distinctive',38800,4,'C001',19),
+('Alfa Romeo','M168','166 2.4 JTD Multijet Distinctive',42500,3,'C002',5),
+('Alfa Romeo','M169','166 2.4 JTD Multijet Luxury',48050,4,'C003',13),
+('Alfa Romeo','M170','166 2.4 JTD Multijet Progression',39650,4,'C004',9),
+('Alfa Romeo','M171','166 2.4 JTD Progression',35950,3,'C005',13),
+('Alfa Romeo','M172','166 3.2 V6 Distinctive',46500,5,'C006',12),
+('Alfa Romeo','M173','166 3.2 V6 Luxury',52050,2,'C007',13),
+('Alfa Romeo','M174','166 3.2 V6 Progression',43650,3,'C008',7),
+('Alfa Romeo','Crosswagon','Crosswagon 1.9 JTD Q4',33103,5,'C009',17),
+('Audi','A4','A4 1.8T',30550,5,'C010',1),
+('Audi','A4','A4 1.8T Quattro',33320,1,'C011',18),
+('Audi','A4','A4 2.0 TDi',30650,4,'C012',15),
+('Audi','A4','A4 2.0 TFSi',33550,5,'C013',3),
+('Audi','A4','A4 2.0 TFSi Quattro',35950,2,'C014',4),
+('Audi','A4','A4 2.0i 20v',28050,5,'C015',2),
+('Audi','A4','A4 2.5 TDi',34750,2,'C016',13),
+('Audi','A4','A4 3.0 TDi Quattro',40250,3,'C017',17),
+('Audi','A4','A4 3.0 TDi Quattro Tiptronic (opcional)',42300,4,'C018',2),
+('Audi','A4','A4 3.2 FSi Multitronic *',41950,4,'C019',17),
+('Audi','A4','A4 3.2 FSi Quattro',42470,5,'C020',17),
+('Audi','A4','A4 Avant 1.8T',31850,5,'C021',4),
+('Audi','A4','A4 Avant 1.8T Quattro',34620,2,'C022',9),
+('Audi','A4','A4 Avant 2.0 TDi',31950,5,'C023',5),
+('Audi','A4','A4 Avant 2.0 TFSi',34850,4,'C024',12),
+('Audi','A4','A4 Avant 2.0 TFSi Quattro',37250,5,'C025',12),
+('Audi','A4','A4 Avant 2.0i 20v',29350,4,'C026',7),
+('Audi','A4','A4 Avant 2.5 TDi',36050,1,'C027',9),
+('Audi','A4','A4 Avant 3.0 TDi Quattro',41550,4,'C028',12),
+('Audi','A4','A4 Avant 3.2 FSi Multitronic *',43250,5,'C029',4),
+('Audi','A4','A4 Avant 3.2 FSi Quattro',43770,1,'C030',10),
+('Audi','A6','A6 2.0 TDi',36110,1,'C031',3),
+('Audi','A7','A6 2.4',38430,4,'C032',9),
+('Audi','A8','A6 2.4 Quattro',41530,1,'C033',6),
+('Audi','A9','A6 2.7 TDi',41450,2,'C034',6),
+('Audi','A10','A6 3.0 TDi Quattro',47100,3,'C035',13),
+('Audi','A11','A6 3.0 TDi Quattro Tiptronic',49400,4,'C036',11),
+('Audi','A12','A6 3.2 FSi',46230,4,'C037',8),
+('Audi','A13','A6 3.2 FSi Quattro',49330,4,'C038',1),
+('Audi','A14','A6 3.2 FSi Quattro Tiptronic',51630,3,'C039',1),
+('Audi','A15','A6 4.2 Quattro Tiptronic',69500,4,'C040',5),
+('Audi','A8','A8 3.0 V6 TDi Quattro Tiptronic',69350,1,'C041',11),
+('Audi','A9','A8 3.7 V8 Quattro Tiptronic',78500,5,'C042',5),
+('Audi','A10','A8 4.2 V8 Quattro Tiptronic',86300,3,'C043',19),
+('Audi','A11','A8 6.0 W12 Quattro Tiptronic',120540,5,'C044',18),
+('Audi','A12','A8 L 4.2 V8 Quattro Tiptronic',92300,5,'C045',16),
+('Audi','A13','A8 L 6.0 W12 Quattro Tiptronic',128630,2,'C046',8),
+('Audi','Allroad Quattro','Allroad Quattro 2.5 TDi',49300,4,'C047',9),
+('Audi','Allroad Quattro','Allroad Quattro 2.5 TDi Tiptronic',51470,2,'C048',7),
+('Audi','Allroad Quattro','Allroad Quattro 2.5 TDi/163',46000,3,'C049',11),
+('Audi','Allroad Quattro','Allroad Quattro 2.7T',53960,3,'C050',15),
+('Audi','Allroad Quattro','Allroad Quattro 2.7T Tiptronic',56130,3,'C051',15),
+('Audi','Allroad Quattro','Allroad Quattro 4.2 V8 Tiptronic',69320,4,'C052',9),
+('Audi','RS6','RS6 Avant 4.2T V8 Quattro Tiptronic',102040,3,'C053',9),
+('Audi','S4','S4 4.2 V8 Quattro',59750,1,'C054',9),
+('Audi','S5','S4 Avant 4.2 V8 Quattro',61050,4,'C055',16),
+('Audi','S6','S6 Avant 4.2 V8 Quattro Tiptronic',77320,3,'C056',5),
+('Autovaz','VAZ 110/111/112','110 1.5',8990,3,'C057',10),
+('Autovaz','VAZ 110/111/113','110 1.5 16v',9600,2,'C058',11),
+('Autovaz','VAZ 110/111/114','111 1.5',9600,5,'C059',0),
+('Autovaz','VAZ 110/111/115','111 1.5 16v',10200,2,'C060',15),
+('Bentley','Arnage','Arnage R aut.',250000,4,'C061',2),
+('Bentley','Arnage','Arnage Red Label aut.',247000,5,'C062',7),
+('Bentley','Arnage','Arnage T aut.',278000,1,'C063',9),
+('BMW','Serie 3','320d',33600,4,'C064',16),
+('BMW','Serie 4','320i',32100,4,'C065',2),
+('BMW','Serie 5','325i',37000,4,'C066',8),
+('BMW','Serie 6','330i',40900,3,'C067',1),
+('BMW','Serie 5','545i Touring',73500,3,'C068',12),
+('Cadillac','Seville','Seville STS aut.',63415,1,'C069',11),
+('Chevrolet','Kalos','Kalos 1.4 16v SR 4p *',11295,3,'C070',13),
+('Chrysler','300C','300C 2.7 V6',37650,4,'C071',19),
+('Chrysler','300C','300C 3.5 V6',44490,1,'C072',15),
+('Chrysler','300C','300C 5.7 V8',55000,2,'C073',2),
+('Chrysler','Sebring','Sebring 2.7 V6 Limited Autostick',26590,3,'C074',4),
+('Citroën','C5','C5 Break 1.6 HDi FAP Premier',23370,5,'C075',6),
+('Citroën','C6','C5 Break 1.6 HDi FAP SX',21670,4,'C076',18),
+('Citroën','C7','C5 Break 2.0 HDi Exclusive 6v',26670,3,'C077',0),
+('Citroën','C8','C5 Break 2.0 HDi Premier 6v',24570,3,'C078',10),
+('Citroën','C9','C5 Break 2.0 HDi SX 6v',22870,3,'C079',17),
+('Citroën','C10','C5 Break 2.0i 16v SX',21270,5,'C080',0),
+('Citroën','C11','C5 Break 2.2 16v HDi FAP Exclusive aut.',28420,4,'C081',17),
+('Citroën','Xsara','Xsara Break 1.6i 16v Premier',14233,1,'C082',13),
+('Citroën','Xsara','Xsara Break 2.0 HDi/110 Premier',16987,5,'C083',15),
+('Citroën','Xsara','Xsara Break 2.0 HDi/90 Premier',15807,5,'C084',9),
+('Fiat','Stilo','Stilo MW 1.6 16v Dynamic',17510,5,'C085',11),
+('Fiat','Stilo','Stilo MW 1.9 JTD Multijet Dynamic',20510,2,'C086',0),
+('Fiat','Stilo','Stilo MW 1.9 JTD/115 Dynamic',19310,3,'C087',11),
+('Ford','Focus','Focus Wagon 1.6 TDCi/109 Ghia *',20915,1,'C088',3),
+('Ford','Focus','Focus Wagon 1.6 TDCi/109 Trend *',19415,1,'C089',14),
+('Ford','Focus','Focus Wagon 1.6i Trend *',17025,2,'C090',7),
+('Ford','Focus','Focus Wagon 2.0 TDCi Ghia *',22605,2,'C091',14),
+('Ford','Focus','Focus Wagon 2.0 TDCi Sport *',21805,1,'C092',12),
+('Ford','Focus','Focus Wagon 2.0i Ghia *',20925,2,'C093',1),
+('Honda','Accord','Accord 2.0i 16v VTEC Comfort 4p',21900,2,'C094',1),
+('Honda','Accord','Accord 2.0i 16v VTEC Sport 4p',23900,2,'C095',8),
+('Honda','Accord','Accord 2.0i VTEC Sport 4p aut.',25100,2,'C096',13),
+('Honda','Accord','Accord 2.2 i-CTDi Executive 4p',28400,4,'C097',6),
+('Honda','Accord','Accord 2.2 i-CTDi Sport 4p',26400,1,'C098',10),
+('Honda','Accord','Accord 2.4i 16v VTEC Executive 4p',29100,3,'C099',17),
+('Honda','Accord','Accord Tourer 2.0i 16v VTEC Sport',25900,4,'C100',13),
+('Honda','Accord','Accord Tourer 2.2 i-CTDi Executive',30400,5,'C101',4),
+('Honda','Accord','Accord Tourer 2.2 i-CTDi Sport',28400,3,'C102',15),
+('Honda','Accord','Accord Tourer 2.4i VTEC Executive aut.',34400,4,'C103',7),
+('Hyundai','Accent','Accent 1.3i 12v GL 4p',12525,5,'C104',3),
+('Hyundai','Elantra','Elantra 1.6 Comfort 4p',16300,2,'C105',18),
+('Hyundai','Elantra','Elantra 2.0 CRDi Comfort 4p',18100,3,'C106',2),
+('Hyundai','Elantra','Elantra 2.0 Style 4p',18700,5,'C107',14),
+('Hyundai','XG','XG 3.5 V6 GLS aut.',34150,3,'C108',2),
+('Jaguar','S-Type','S-Type 2.5 V6 Classic',42300,1,'C109',8),
+('Jaguar','S-Type','S-Type 2.5 V6 Executive aut.',49300,1,'C110',14),
+('Jaguar','S-Type','S-Type 2.5 V6 Sport',49300,2,'C111',19),
+('Jaguar','S-Type','S-Type 2.7D Classic',44300,5,'C112',3),
+('Jaguar','S-Type','S-Type 2.7D Executive aut.',51300,3,'C113',19),
+('Jaguar','S-Type','S-Type 2.7D Sport',51300,4,'C114',4),
+('Jaguar','S-Type','S-Type 3.0 V6 Executive aut.',52500,5,'C115',1),
+('Jaguar','S-Type','S-Type 3.0 V6 Sport',52500,5,'C116',14),
+('Jaguar','S-Type','S-Type 4.2 V8 Executive aut.',60500,1,'C117',8),
+('Jaguar','S-Type','S-Type 4.2 V8 R aut.',79700,5,'C118',13),
+('Jaguar','XJ','Super V8 L 4.2 S/C aut.',123500,5,'C119',9),
+('Jaguar','XJ','XJ6 3.0 V6 Executive aut.',69900,3,'C120',13),
+('Jaguar','XJ','XJ8 3.5 V8 Executive aut.',76600,2,'C121',7),
+('Jaguar','XJ','XJ8 4.2 V8 Executive aut.',81800,1,'C122',13),
+('Jaguar','XJ','XJ8 L 3.5 V8 Executive aut.',79100,5,'C123',15),
+('Jaguar','XJ','XJ8 L 4.2 V8 Executive aut.',84300,5,'C124',10),
+('Jaguar','XJ','XJR 4.2 V8 S/C aut.',107700,4,'C125',1),
+('Kia','Cerato','Cerato 1.6 LX 4p',13620,3,'C126',3),
+('Kia','Cerato','Cerato 2.0 CRDi EX 4p',17400,4,'C127',18),
+('Kia','Cerato','Cerato 2.0 CRDi LX 4p',15390,1,'C128',7),
+('Kia','Cerato','Cerato 2.0 EX 4p',16680,3,'C129',5),
+('Kia','Magentis','Magentis 2.0 EX',21106,1,'C130',4),
+('Kia','Magentis','Magentis 2.5 V6 EX',23781,3,'C131',13),
+('Kia','Opirus','Opirus 3.5 V6 EX',30165,5,'C132',18),
+('Lancia','Lybra','Lybra 1.8',23170,1,'C133',9),
+('Lancia','Lybra','Lybra 1.9 JTD',23920,2,'C134',17),
+('Lancia','Lybra','Lybra 2.0 LX',26330,2,'C135',1),
+('Lancia','Lybra','Lybra 2.4 JTD Emblema',28320,5,'C136',14),
+('Lancia','Lybra','Lybra 2.4 JTD Intensa',29040,3,'C137',14),
+('Lancia','Lybra','Lybra 2.4 JTD LX',28120,3,'C138',8),
+('Lancia','Lybra','Lybra Station Wagon 1.8',24180,5,'C139',1),
+('Lancia','Lybra','Lybra Station Wagon 1.9 JTD',24930,4,'C140',9),
+('Lancia','Lybra','Lybra Station Wagon 2.4 JTD Emblema',29330,2,'C141',2),
+('Lancia','Lybra','Lybra Station Wagon 2.4 JTD Intensa',30050,2,'C142',19),
+('Lancia','Lybra','Lybra Station Wagon 2.4 JTD LX',29130,3,'C143',17),
+('Lancia','Thesis','Thesis 2.4 20v Executive',39820,5,'C144',11),
+('Lancia','Thesis','Thesis 2.4 JTD Multijet Emblema',47950,5,'C145',15),
+('Lancia','Thesis','Thesis 2.4 JTD Multijet Emblema CAE',50080,3,'C146',18),
+('Lancia','Thesis','Thesis 2.4 JTD Multijet Executive',43580,1,'C147',17),
+('Lancia','Thesis','Thesis 3.2 Emblema CAE',52000,4,'C148',13),
+('Lexus','IS','IS 200 Luxury',28500,2,'C149',6),
+('Lexus','IS','IS 200 Premium',26975,2,'C150',9),
+('Lexus','IS','IS 200 President',31190,4,'C151',17),
+('Lexus','IS','IS 200 Sportcross Luxury',30635,1,'C152',17),
+('Lexus','IS','IS 200 Sportcross Premium',29100,3,'C153',0),
+('Lexus','IS','IS 200 Sportcross President',33310,5,'C154',0),
+('Lexus','IS','IS 300 Premium',37400,4,'C155',0),
+('Lexus','IS','IS 300 Sportcross Premium',39620,1,'C156',11),
+('Lexus','LS','LS 430',91860,2,'C157',0),
+('Maserati','Quattroporte','Quattroporte 4.2',109312,3,'C158',11),
+('Mercedes-Benz','C','C 180 Kompressor Classic',31900,3,'C159',14),
+('Mercedes-Benz','C','C 200 CDi Classic',32950,1,'C160',3),
+('Mercedes-Benz','C','C 200 Kompressor Classic',34100,4,'C161',13),
+('Mercedes-Benz','C','C 220 CDi Classic',35700,1,'C162',19),
+('Mercedes-Benz','C','C 220 CDi Classic aut. (opcional)',37039.8,1,'C163',9),
+('Mercedes-Benz','C','C 320 CDi Classic *',42600,5,'C164',10),
+('Mercedes-Benz','C','C 55 AMG aut.',70500,2,'C165',18),
+('Mercedes-Benz','C','C Familiar 180 Kompressor Classic',33850,5,'C166',2),
+('Mercedes-Benz','C','C Familiar 200 CDi Classic',34750,3,'C167',10),
+('Mercedes-Benz','C','C Familiar 200 Kompressor Classic',35900,4,'C168',7),
+('Mercedes-Benz','C','C Familiar 220 CDi Classic',37550,3,'C169',15),
+('Mercedes-Benz','C','C Familiar 320 CDi Classic *',44500,4,'C170',2),
+('Mercedes-Benz','C','C Familiar 55 AMG aut.',71500,2,'C171',11),
+('Mercedes-Benz','CLS','CLS 350',61900,5,'C172',18),
+('Mercedes-Benz','CLS','CLS 500',76250,5,'C173',3),
+('Mercedes-Benz','CLS','CLS 55 AMG',108400,5,'C174',19),
+('Mercedes-Benz','E','E 200 CDi Classic',39250,2,'C175',2),
+('Mercedes-Benz','E','E 200 K Classic',40700,1,'C176',8),
+('Mercedes-Benz','E','E 220 CDi Classic',41950,4,'C177',6),
+('Mercedes-Benz','E','E 350 Classic aut.',52700,2,'C178',11),
+('Mercedes-Benz','E','E 500 4M aut.',69000,1,'C179',1),
+('Mercedes-Benz','E','E 500 7G',67400,2,'C180',17),
+('Mercedes-Benz','E','E 55 K AMG aut.',103300,4,'C181',16),
+('Mercedes-Benz','E','E Familiar 200 K Classic',43900,5,'C182',4),
+('Mercedes-Benz','E','E Familiar 220 CDi Classic',45150,3,'C183',7),
+('Mercedes-Benz','E','E Familiar 350 Classic aut.',55900,4,'C184',18),
+('Mercedes-Benz','E','E Familiar 500 4M aut.',72200,2,'C185',17),
+('Mercedes-Benz','E','E Familiar 500 aut.',70600,2,'C186',8),
+('Mercedes-Benz','E','E Familiar 55 K AMG aut.',106500,4,'C187',15);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
