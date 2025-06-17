@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sorpresa</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #f0f0f0, #e2e2e2);
+      color: #333;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+      color: #222;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+      border-color: #aaa;
+    }
+
+    img {
+      width: 120px;
+      height: auto;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    img:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Pulse aquí para abrir la sorpresa</h1>
+  <form action="index.php" method="get">
+    <button type="submit">
+      <img src="imagen.png" alt="Botón sorpresa">
+    </button>
+  </form>
+</body>
+</html>
