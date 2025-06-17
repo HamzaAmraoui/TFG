@@ -44,7 +44,7 @@ table
 	<center><img src="Banner1.jpg" width ="800"><br><br><br>
 
 <?php
-$con=mysqli_connect("db","root","root","miapp");
+$con=mysqli_connect("db","root","root","concesionario");
 
 if (!$con)
 {
