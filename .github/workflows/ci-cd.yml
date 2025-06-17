@@ -53,7 +53,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Desplegar en EC2 con Docker y Nginx
+      - name: Desplegar en EC2 con Docker y Apache
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
