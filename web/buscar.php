@@ -38,7 +38,7 @@ table {
 <?php
 
 $pro = $_GET['bus'];
-$con=mysqli_connect("localhost","root","","concesionario");
+$con=mysqli_connect("db","root","root","miapp");
 
 if (!$con)
 {
