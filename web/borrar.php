@@ -1,6 +1,6 @@
 <?php
 $cod =$_GET['cod'];
-$con=mysqli_connect("localhost","root","","concesionario");
+$con=mysqli_connect("db","root","root","miapp");
 
 if (!$con)
 {
