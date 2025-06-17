@@ -91,7 +91,7 @@ jobs:
     
               # Desplegar nueva imagen Docker
               sudo docker pull khalifi11/mi-appweb:latest
-              sudo docker compose down || true
+              sudo docker compose down -v || true
               sudo docker compose up -d
               sudo docker exec $(sudo docker ps -qf "ancestor=mysql:5.7") mysql -u root -proot miapp < ./db/init.sql
     
