@@ -8,18 +8,20 @@ services:
     depends_on:
       - db
     restart: always
-
+    
   db:
     image: mysql:5.7
-    restart: always
+    container_name: mi-app-db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: miapp
       MYSQL_USER: usuario
       MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql_data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
 
 volumes:
-  mysql_data:
+  mysql-data:
